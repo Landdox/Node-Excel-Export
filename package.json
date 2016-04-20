@@ -1,6 +1,6 @@
 {
   "name": "excel-export-2",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Cloned form excel-export, fixes some of the issues with rendering Excels that I found in excel-export",
   "main": "index.js",
   "scripts": {
