@@ -12,7 +12,6 @@ function Sheet(config, xlsx, shareStrings, convertedShareStrings){
   this.shareStrings = shareStrings;
   this.convertedShareStrings = convertedShareStrings; 
 }
-
 Sheet.prototype.generate = function(){
   var config = this.config, xlsx = this.xlsx;
 	var cols = config.cols,
@@ -37,7 +36,13 @@ Sheet.prototype.generate = function(){
 	//first row for column caption
 	row = '<x:row r="1" spans="1:' + colsLength + '">';
 	var colStyleIndex;
-		colsWidth = '<col customWidth = "1" width="' + cols[0].width + '" max = "1" min="1"/>';
+	for (k = 0; k < colsLength; k++) {
+		colStyleIndex = cols[k].captionStyleIndex || 0;
+		row += addStringCell(self, getColumnLetter(k + 1) + 1, cols[k].caption, colStyleIndex);
+		if (cols[k].width) {
+			colsWidth += '<col customWidth = "1" width="' + cols[k].width + '" max = "' + (k + 1) + '" min="' + (k + 1) + '"/>';
+		}
+	}
 	row += '</x:row>';
 	rows += row;
 
@@ -61,7 +66,7 @@ Sheet.prototype.generate = function(){
 				cellData = cols[j].beforeCellWrite(r, cellData, e);
 				styleIndex = e.styleIndex || styleIndex;
 				cellType = e.cellType;
-				e = null;
+				delete e;
 			}
 			switch (cellType) {
 			case 'number':
